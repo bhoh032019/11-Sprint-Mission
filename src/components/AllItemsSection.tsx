@@ -4,6 +4,11 @@ import ItemCard from './ItemCard';
 import '../style/Items.css';
 import { ReactComponent as SearchIcon } from '../images/ic_search.svg';
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  Product,
+  ProductListResponse,
+  ProductOrderBy,
+} from './types/productTypes';
 
 const getPageSize = () => {
   const width = window.innerWidth;
@@ -20,17 +25,29 @@ const getPageSize = () => {
 };
 
 function AllItemsSection() {
-  const [orderBy, setOrderBy] = useState('recent');
+  const [orderBy, setOrderBy] = useState<ProductOrderBy>('recent');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(getPageSize());
-  const [itemList, setItemList] = useState([]);
+  const [itemList, setItemList] = useState<Product[]>([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [totalPageNum, setTotalPageNum] = useState();
+  const [totalPageNum, setTotalPageNum] = useState(1);
   const navigate = useNavigate();
 
-  const fetchSortedData = async ({ orderBy, page, pageSize }) => {
+  const fetchSortedData = async ({
+    orderBy,
+    page,
+    pageSize,
+  }: {
+    orderBy: ProductOrderBy;
+    page: number;
+    pageSize: number;
+  }) => {
     try {
-      const products = await getProducts({ orderBy, page, pageSize });
+      const products: ProductListResponse = await getProducts({
+        orderBy,
+        page,
+        pageSize,
+      });
       setItemList(products.list);
       setTotalPageNum(Math.ceil(products.totalCount / pageSize));
     } catch (error) {
