@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { getProducts } from '../api';
 import ItemCard from './ItemCard';
 import '../style/Items.css';
+import {
+  Product,
+  ProductListResponse,
+  ProductOrderBy,
+} from './types/productTypes';
 
 const getPageSize = () => {
   const width = window.innerWidth;
@@ -18,11 +23,20 @@ const getPageSize = () => {
 };
 
 function BestItemSection() {
-  const [itemList, setItemList] = useState([]);
+  const [itemList, setItemList] = useState<Product[]>([]);
   const [pageSize, setPageSize] = useState(getPageSize());
 
-  const fetchSortedData = async ({ orderBy, pageSize }) => {
-    const products = await getProducts({ orderBy, pageSize });
+  const fetchSortedData = async ({
+    orderBy,
+    pageSize,
+  }: {
+    orderBy: ProductOrderBy;
+    pageSize: number;
+  }) => {
+    const products: ProductListResponse = await getProducts({
+      orderBy,
+      pageSize,
+    });
     setItemList(products.list);
   };
 
