@@ -29,7 +29,10 @@ function ProductCreateForm({
   const [values, setValues] = useState(initialValues);
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleChange = (name: string, value: string | string[]) => {
+  const handleChange = (
+    name: string,
+    value: string | string[] | File | null,
+  ) => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 

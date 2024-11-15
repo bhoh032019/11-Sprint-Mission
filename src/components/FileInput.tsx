@@ -1,15 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import '../style/ProductCreateForm.css';
 import { ReactComponent as PlusIcon } from '../images/ic_plus.svg';
 import { ReactComponent as DeleteIcon } from '../images/ic_X.svg';
 
-function FileInput({ name, value, initialPreview, onChange }) {
+interface FileInputProps {
+  name: string;
+  value: File | null;
+  initialPreview: string | null;
+  onChange: (name: string, value: File | null) => void;
+}
+
+function FileInput({ name, value, initialPreview, onChange }: FileInputProps) {
   const [preview, setPreview] = useState(initialPreview);
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [isImageValid, setIsImageValid] = useState(false);
 
-  const handleChange = (e) => {
-    const nextValue = e.target.files[0];
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+
+    const nextValue = fileList[0];
     onChange(name, nextValue);
     setIsImageValid(true);
   };
@@ -55,7 +65,7 @@ function FileInput({ name, value, initialPreview, onChange }) {
           <div className="preview-container">
             <img
               className="image-preview"
-              src={preview}
+              src={preview || ''}
               alt="이미지 미리보기"
             />
             <button className="image-delete-btn" onClick={handleClearClick}>
