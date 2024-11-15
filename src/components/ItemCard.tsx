@@ -2,8 +2,13 @@ import React from 'react';
 import '../style/Items.css';
 import { ReactComponent as Heart } from '../images/ic_heart.svg';
 import { Link } from 'react-router-dom';
+import { Product } from './types/productTypes';
 
-function ItemCard({ item }) {
+interface ItemCardProps {
+  item: Product;
+}
+
+function ItemCard({ item }: ItemCardProps) {
   return (
     <Link to={`/items/${item.id}`} state={{ item: item }}>
       <div className="itemCard">
