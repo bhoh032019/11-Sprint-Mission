@@ -3,7 +3,7 @@ import ProductCreateForm from '../components/ProductCreateForm';
 function AddItems() {
   return (
     <div>
-      <ProductCreateForm />
+      <ProductCreateForm initialPreview={null} />
     </div>
   );
 }

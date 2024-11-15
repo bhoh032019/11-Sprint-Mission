@@ -1,7 +1,18 @@
 import '../style/FileInput.css';
 import FileInput from './FileInput';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import TagInput from './TagInput';
+
+interface ProductCreateFormProps {
+  initialValues?: {
+    title: string;
+    content: string;
+    imgFile: File | null;
+    price: string;
+    tag: string[];
+  };
+  initialPreview: string | null;
+}
 
 const INITIAL_VALUES = {
   title: '',
@@ -11,21 +22,26 @@ const INITIAL_VALUES = {
   tag: [],
 };
 
-function ProductCreateForm({ initialValues = INITIAL_VALUES, initialPreview }) {
+function ProductCreateForm({
+  initialValues = INITIAL_VALUES,
+  initialPreview,
+}: ProductCreateFormProps) {
   const [values, setValues] = useState(initialValues);
   const [isFormValid, setIsFormValid] = useState(false);
 
-  const handleChange = (name, value) => {
+  const handleChange = (name: string, value: string | string[]) => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     handleChange(name, value);
   };
 
   // 태그 값이 변경될 때 태그 상태 업데이트
-  const handleTagChange = (tags) => {
+  const handleTagChange = (tags: string[]) => {
     handleChange('tag', tags);
   };
 
