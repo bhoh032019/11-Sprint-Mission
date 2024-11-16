@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { ReactComponent as Dropdown } from '../images/ic_kebab.svg';
 import '../style/DropdownMenu.css';
 
-function DropdownMenu({ onSelection }) {
+interface DropdownMenuProps {
+  onSelection: (Option: string) => void;
+}
+
+function DropdownMenu({ onSelection }: DropdownMenuProps) {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const toggleDropdown = () => {
