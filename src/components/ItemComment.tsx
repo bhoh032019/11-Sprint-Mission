@@ -4,9 +4,26 @@ import { ReactComponent as Profile } from '../images/ic_profile.svg';
 import { ReactComponent as EmptyComment } from '../images/Img_inquiry_empty.svg';
 import '../style/ItemComment.css';
 import DropdownMenu from './DropdownMenu';
+import { Product } from './types/productTypes';
 
-function ItemComment({ item }) {
-  const [comments, setComments] = useState([]);
+interface Comment {
+  id: number;
+  content: string;
+  writer: {
+    nickname: string;
+    image?: string;
+  };
+  updatedAt: string;
+  isEditing: boolean;
+  originalContent: string;
+}
+
+interface ItemCommentProps {
+  item: Product;
+}
+
+function ItemComment({ item }: ItemCommentProps) {
+  const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -21,11 +38,13 @@ function ItemComment({ item }) {
         );
         console.log(response.data.list);
         // 각 댓글에 isEditing 및 originalContent 상태 추가
-        const commentsWithEditState = response.data.list.map((comment) => ({
-          ...comment,
-          isEditing: false,
-          originalContent: comment.content, // 원본 내용을 저장
-        }));
+        const commentsWithEditState: Comment[] = response.data.list.map(
+          (comment: Comment) => ({
+            ...comment,
+            isEditing: false,
+            originalContent: comment.content, // 원본 내용을 저장
+          }),
+        );
         setComments(commentsWithEditState);
       } catch (error) {
         console.error('Error fetching comments:', error);
@@ -35,7 +54,7 @@ function ItemComment({ item }) {
     fetchComments();
   }, []);
 
-  const formatDate = (isoDate) => {
+  const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
     return date
       .toLocaleDateString('ko-KR', {
@@ -48,7 +67,7 @@ function ItemComment({ item }) {
   };
 
   // 수정하기 버튼 클릭 시: isEditing을 true로 하고 원본 content 저장
-  const handleEditClick = (index) => {
+  const handleEditClick = (index: number) => {
     setComments((prevComments) =>
       prevComments.map((comment, i) =>
         i === index
@@ -59,7 +78,7 @@ function ItemComment({ item }) {
   };
 
   // 수정 취소 버튼 클릭 시: 원본 content로 복구
-  const handleCancelEdit = (index) => {
+  const handleCancelEdit = (index: number) => {
     setComments((prevComments) =>
       prevComments.map((comment, i) =>
         i === index
@@ -92,7 +111,7 @@ function ItemComment({ item }) {
                   <>
                     <div className="comment-content">{comment.content}</div>
                     <DropdownMenu
-                      onSelection={(action) => {
+                      onSelection={(action: string) => {
                         if (action === 'fixed') {
                           handleEditClick(index);
                         }

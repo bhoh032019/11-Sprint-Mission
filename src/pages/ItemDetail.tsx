@@ -3,7 +3,7 @@ import '../style/ItemDetail.css';
 import { ReactComponent as BackIcon } from '../images/ic_back.svg';
 import { ReactComponent as Heart } from '../images/ic_heart.svg';
 import { ReactComponent as Profile } from '../images/ic_profile.svg';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import ItemComment from '../components/ItemComment';
 import axiosInstance from '../axiosInstance';
 
@@ -40,7 +40,7 @@ function ItemDetail({ initialValues = INITIAL_VALUES }) {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContentValue(e.target.value);
   };
 
@@ -48,7 +48,7 @@ function ItemDetail({ initialValues = INITIAL_VALUES }) {
     navigate('/items');
   };
 
-  const formatDate = (isoDate) => {
+  const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
     return date
       .toLocaleDateString('ko-KR', {

@@ -3,20 +3,25 @@ import '../style/ProductCreateForm.css';
 import { ReactComponent as DeleteIcon } from '../images/ic_X.svg';
 import '../style/TagInput.css';
 
-function TagInput({ value, onChange }) {
-  const [tags, setTags] = useState([]);
+interface TagInputProps {
+  value: string[];
+  onChange: (tags: string[]) => void;
+}
 
-  const handleKeyDown = (e) => {
+function TagInput({ value, onChange }: TagInputProps) {
+  const [tags, setTags] = useState<string[]>([]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return;
-    const value = e.target.value;
+    const value = e.currentTarget.value;
     if (!value.trim()) return;
     const newTags = [...tags, `#${value}`];
     setTags(newTags);
     onChange(newTags); // 태그 변경 시 부모 컴포넌트에 알림
-    e.target.value = '';
+    e.currentTarget.value = '';
   };
 
-  const handleTagClearClick = (tagIdx) => {
+  const handleTagClearClick = (tagIdx: number) => {
     const newTags = tags.filter((tag, idx) => idx !== tagIdx);
     setTags(newTags);
     onChange(newTags); // 태그 삭제 시 부모 컴포넌트에 알림
