@@ -1,3 +1,9 @@
+.best-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .best-title {
   font-family: Pretendard;
   font-size: 20px;
@@ -12,8 +18,71 @@
 .article-list {
   display: flex;
   padding: 0px 24px;
-  gap: 10px;
+  justify-content: space-between;
   border-radius: 8px;
   opacity: 0px;
   background-color: #f9fafb;
+}
+
+.article-item {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.article-header {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 24px;
+  border-radius: 0px 0px 16px 16px;
+  background-color: #3692ff;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #ffffff;
+  margin-right: auto;
+}
+
+.article-title {
+  font-family: Pretendard;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: #1f2937;
+}
+
+.article-body {
+  display: flex;
+  gap: 8px;
+}
+
+.article-image {
+  padding: 13.71px 12px 13.71px 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.article-footer {
+  display: flex;
+  font-size: 14px;
+  justify-content: space-between;
+}
+
+.article-info {
+  display: flex;
+  gap: 8px;
+}
+
+.article-likes {
+  display: flex;
+  align-items: center;
 }

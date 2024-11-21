@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { getArticles } from '../../api/boardApi';
 import useDimensions from '../../hooks/useDimensions';
 import styles from '../../style/BestArticlesSection.module.css';
+import Image from 'next/image';
+import Heart from '../../images/ic_heart.svg';
+import Medal from '../../images/ic_medal.svg';
 
 interface ArticleList {
   id: number;
@@ -9,8 +12,8 @@ interface ArticleList {
   content: string;
   image: string;
   likeCount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   writer: {
     id: number;
     nickname: string;
@@ -32,6 +35,18 @@ export default function BestArticlesSection() {
   const [pageSize, setPageSize] = useState<number | null>(null);
 
   const viewWidth = useDimensions();
+
+  const formatDate = (isoDate: string) => {
+    const date = new Date(isoDate);
+    return date
+      .toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replace(/\. /g, '. ')
+      .slice(0, -1); // 공백 제거
+  };
 
   useEffect(() => {
     if (viewWidth === 0) return;
@@ -61,21 +76,31 @@ export default function BestArticlesSection() {
         <div className={styles['article-list']}>
           {articles.map((article) => (
             <div key={article.id} className={styles['article-item']}>
-              <h2 className={styles['article-title']}>{article.title}</h2>
-              <img
-                src={`${article.image}`}
-                width="100"
-                height="100"
-                alt="게시글 이미지"
-              />
-              <p className={styles['article-content']}>{article.content}</p>
+              <div className={styles['article-header']}>
+                <Medal />
+                Best
+              </div>
+              <div className={styles['article-body']}>
+                <h2 className={styles['article-title']}>{article.title}</h2>
+                <Image
+                  width={48}
+                  height={44.57}
+                  src={`${article.image}`}
+                  alt="게시글 이미지"
+                  className={styles['article-image']}
+                />
+              </div>
               <div className={styles['article-footer']}>
-                <span className={styles['article-writer']}>
-                  작성자: {article.writer.nickname}
-                </span>
-                <span className={styles['article-likes']}>
-                  좋아요: {article.likeCount}
-                </span>
+                <div className={styles['article-info']}>
+                  <span className={styles['article-writer']}>
+                    {article.writer.nickname}
+                  </span>
+                  <span className={styles['article-likes']}>
+                    <Heart />
+                    {article.likeCount}
+                  </span>
+                </div>
+                <span>{formatDate(article.updatedAt)}</span>
               </div>
             </div>
           ))}
