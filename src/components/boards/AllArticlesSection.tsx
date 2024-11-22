@@ -4,6 +4,8 @@ import { getAllArticles } from '../../api/boardApi';
 import Link from 'next/link';
 import Image from 'next/image';
 import Heart from '../../images/ic_heart.svg';
+import SearchBar from '../SearchBar';
+import router from 'next/router';
 
 interface ArticleList {
   id: number;
@@ -38,6 +40,19 @@ export default function AllArticlesSection() {
       .slice(0, -1); // 공백 제거
   };
 
+  const handleSearch = (searchKeyword: string) => {
+    const query = { ...router.query };
+    if (searchKeyword.trim()) {
+      query.q = searchKeyword;
+    } else {
+      delete query.q; // Optional: 키워드가 빈 문자열일 때 URL에서 query string 없애주기
+    }
+    router.replace({
+      pathname: router.pathname,
+      query,
+    });
+  };
+
   useEffect(() => {
     {
       const fetchAllArticles = async () => {
@@ -61,6 +76,7 @@ export default function AllArticlesSection() {
           글쓰기
         </Link>
       </div>
+      <SearchBar onSearch={handleSearch} />
       {articles ? (
         <div className={styles['allarticle-list']}>
           {articles.map((article) => (
