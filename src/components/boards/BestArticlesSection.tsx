@@ -84,7 +84,7 @@ export default function BestArticlesSection() {
                 <h2 className={styles['article-title']}>{article.title}</h2>
                 <Image
                   width={48}
-                  height={44.57}
+                  height={48}
                   src={`${article.image}`}
                   alt="게시글 이미지"
                   className={styles['article-image']}
@@ -100,7 +100,9 @@ export default function BestArticlesSection() {
                     {article.likeCount}
                   </span>
                 </div>
-                <span>{formatDate(article.updatedAt)}</span>
+                <span className={styles['article-updatedAt']}>
+                  {formatDate(article.updatedAt)}
+                </span>
               </div>
             </div>
           ))}
