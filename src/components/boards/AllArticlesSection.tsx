@@ -6,26 +6,12 @@ import Image from 'next/image';
 import Heart from '../../images/ic_heart.svg';
 import SearchBar from '../SearchBar';
 import router from 'next/router';
-
-interface ArticleList {
-  id: number;
-  title: string;
-  content: string;
-  image: string;
-  likeCount: number;
-  createdAt: string;
-  updatedAt: string;
-  writer: {
-    id: number;
-    nickname: string;
-  };
-}
-
-type ProductOrderBy = 'recent' | 'like';
+import DropdownMenu from '../DropdownMenu';
+import { ArticleList, ArticleOrderBy } from '../types/articleTypes';
 
 export default function AllArticlesSection() {
   const [articles, setArticles] = useState<ArticleList[] | null>(null);
-  const [orderBy, setOrderBy] = useState<ProductOrderBy>('recent');
+  const [orderBy, setOrderBy] = useState<ArticleOrderBy>('recent');
   const [page, setPage] = useState(1);
 
   const formatDate = (isoDate: string) => {
@@ -38,6 +24,10 @@ export default function AllArticlesSection() {
       })
       .replace(/\. /g, '. ')
       .slice(0, -1); // 공백 제거
+  };
+
+  const handleSortSelection = (sortOption: ArticleSortOption) => {
+    setOrderBy(sortOption);
   };
 
   const handleSearch = (searchKeyword: string) => {
@@ -76,7 +66,16 @@ export default function AllArticlesSection() {
           글쓰기
         </Link>
       </div>
-      <SearchBar onSearch={handleSearch} />
+      <div className={styles['all-section-header']}>
+        <SearchBar onSearch={handleSearch} />
+        <DropdownMenu
+          onSelection={handleSortSelection}
+          sortOptions={[
+            { key: 'recent', label: '최신순' },
+            { key: 'like', label: '인기순' },
+          ]}
+        />
+      </div>
       {articles ? (
         <div className={styles['allarticle-list']}>
           {articles.map((article) => (

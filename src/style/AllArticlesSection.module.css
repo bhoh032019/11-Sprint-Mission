@@ -1,6 +1,8 @@
 .all-section-header {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 24px;
+  align-items: center;
 }
 
 .addArticlelink {
