@@ -18,10 +18,18 @@ async function apiRequest({
   }
 }
 
-export async function getArticles(size) {
+export async function getBestArticles(size) {
   return apiRequest({
     method: 'GET',
-    endpoint: `/articles?orderBy=like&pageSize=${size}`,
+    endpoint: `/articles?pageSize=${size}&orderBy=like`,
+    errorMessage: '게시글을 불러오는데 실패했습니다.',
+  });
+}
+
+export async function getAllArticles(page, orderBy) {
+  return apiRequest({
+    method: 'GET',
+    endpoint: `/articles?page=${page}&pageSize=10&orderBy=${orderBy}`,
     errorMessage: '게시글을 불러오는데 실패했습니다.',
   });
 }

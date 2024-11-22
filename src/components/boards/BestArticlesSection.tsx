@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getArticles } from '../../api/boardApi';
+import { getBestArticles } from '../../api/boardApi';
 import useDimensions from '../../hooks/useDimensions';
 import styles from '../../style/BestArticlesSection.module.css';
 import Image from 'next/image';
@@ -58,7 +58,7 @@ export default function BestArticlesSection() {
 
       const fetchBestArticles = async (size: number) => {
         try {
-          const data = await getArticles(size);
+          const data = await getBestArticles(size);
           setArticles(data.list);
         } catch (error) {
           console.error('데이터를 불러오는데 실패 했습니다.', error);
@@ -83,8 +83,8 @@ export default function BestArticlesSection() {
               <div className={styles['article-body']}>
                 <h2 className={styles['article-title']}>{article.title}</h2>
                 <Image
-                  width={48}
-                  height={48}
+                  width={46}
+                  height={46}
                   src={`${article.image}`}
                   alt="게시글 이미지"
                   className={styles['article-image']}
