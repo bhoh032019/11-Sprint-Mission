@@ -1,4 +1,4 @@
-interface ArticleList {
+export interface ArticleList {
   id: number;
   title: string;
   content: string;
@@ -12,4 +12,9 @@ interface ArticleList {
   };
 }
 
-type ArticleOrderBy = 'recent' | 'like';
+export interface ArticleListResponse {
+  totalCount: number;
+  list: ArticleList[];
+}
+
+export type ArticleOrderBy = 'recent' | 'like';
