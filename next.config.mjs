@@ -4,7 +4,10 @@ const nextConfig = {
 
   // 외부 이미지 주소
   images: {
-    domains: ['sprint-fe-project.s3.ap-northeast-2.amazonaws.com'],
+    domains: [
+      'example.com',
+      'sprint-fe-project.s3.ap-northeast-2.amazonaws.com',
+    ],
   },
 
   // SVG 이미지를 리액트 컴포넌트로 변환해주는 라이브러리 설정 추가

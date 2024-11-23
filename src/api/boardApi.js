@@ -26,10 +26,10 @@ export async function getBestArticles(size) {
   });
 }
 
-export async function getAllArticles(page, orderBy) {
+export async function getAllArticles(page, orderBy, keyword) {
   return apiRequest({
     method: 'GET',
-    endpoint: `/articles?page=${page}&pageSize=10&orderBy=${orderBy}`,
+    endpoint: `/articles?page=${page}&pageSize=10&orderBy=${orderBy}&keyword=${keyword}`,
     errorMessage: '게시글을 불러오는데 실패했습니다.',
   });
 }

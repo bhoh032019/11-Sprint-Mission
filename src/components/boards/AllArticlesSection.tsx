@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Heart from '../../images/ic_heart.svg';
 import SearchBar from '../SearchBar';
-import router from 'next/router';
+import router, { useRouter } from 'next/router';
 import DropdownMenu from '../DropdownMenu';
 import { ArticleList, ArticleOrderBy } from '../types/articleTypes';
 
@@ -13,6 +13,8 @@ export default function AllArticlesSection() {
   const [articles, setArticles] = useState<ArticleList[] | null>(null);
   const [orderBy, setOrderBy] = useState<ArticleOrderBy>('recent');
   const [page, setPage] = useState(1);
+  const router = useRouter();
+  const keyword = (router.query.q as string) || '';
 
   const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
@@ -26,7 +28,7 @@ export default function AllArticlesSection() {
       .slice(0, -1); // 공백 제거
   };
 
-  const handleSortSelection = (sortOption: ArticleSortOption) => {
+  const handleSortSelection = (sortOption: ArticleOrderBy) => {
     setOrderBy(sortOption);
   };
 
@@ -47,7 +49,7 @@ export default function AllArticlesSection() {
     {
       const fetchAllArticles = async () => {
         try {
-          const data = await getAllArticles(page, orderBy);
+          const data = await getAllArticles(page, orderBy, keyword);
           setArticles(data.list);
         } catch (error) {
           console.error('데이터를 불러오는데 실패 했습니다.', error);
@@ -56,7 +58,7 @@ export default function AllArticlesSection() {
 
       fetchAllArticles();
     }
-  }, [orderBy]);
+  }, [orderBy, keyword]);
 
   return (
     <div>
