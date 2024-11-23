@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from '../../style/AllArticlesSection.module.css';
 import { getAllArticles } from '../../api/boardApi';
 import Link from 'next/link';
@@ -10,11 +10,15 @@ import DropdownMenu from '../DropdownMenu';
 import { ArticleList, ArticleOrderBy } from '../types/articleTypes';
 
 export default function AllArticlesSection() {
-  const [articles, setArticles] = useState<ArticleList[] | null>(null);
+  const [articles, setArticles] = useState<ArticleList[]>([]);
   const [orderBy, setOrderBy] = useState<ArticleOrderBy>('recent');
   const [page, setPage] = useState(1);
+  const [initialLoad, setInitialLoad] = useState(true); // 초기 로드를 추적
   const router = useRouter();
   const keyword = (router.query.q as string) || '';
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const loadMoreRef = useRef(null);
 
   const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
@@ -30,6 +34,7 @@ export default function AllArticlesSection() {
 
   const handleSortSelection = (sortOption: ArticleOrderBy) => {
     setOrderBy(sortOption);
+    resetData();
   };
 
   const handleSearch = (searchKeyword: string) => {
@@ -45,20 +50,74 @@ export default function AllArticlesSection() {
     });
   };
 
-  useEffect(() => {
-    {
-      const fetchAllArticles = async () => {
-        try {
-          const data = await getAllArticles(page, orderBy, keyword);
-          setArticles(data.list);
-        } catch (error) {
-          console.error('데이터를 불러오는데 실패 했습니다.', error);
-        }
-      };
+  const resetData = () => {
+    setArticles([]);
+    setPage(1);
+    setHasMore(true);
+  };
 
-      fetchAllArticles();
+  const fetchAllArticles = async (currentPage: number) => {
+    setLoading(true);
+    try {
+      const data = await getAllArticles(currentPage, orderBy, keyword);
+      if (data.list.length > 0) {
+        setArticles((prevArticles) => [...prevArticles, ...data.list]);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('데이터를 불러오는데 실패 했습니다.', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (initialLoad) {
+      fetchAllArticles(1);
+      setInitialLoad(false); // 초기 로드를 완료로 설정
+    } else {
+      resetData();
+      fetchAllArticles(1);
     }
   }, [orderBy, keyword]);
+
+  useEffect(() => {
+    if (initialLoad || loading || page === 1) return;
+    fetchAllArticles(page);
+  }, [page]);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 1.0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && hasMore && !loading) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      });
+    };
+
+    const observerInstance = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    const currentRef = loadMoreRef.current;
+
+    if (currentRef) {
+      observerInstance.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observerInstance.unobserve(currentRef);
+      }
+    };
+  }, [hasMore, loading]);
 
   return (
     <div>
@@ -78,7 +137,10 @@ export default function AllArticlesSection() {
           ]}
         />
       </div>
-      {articles ? (
+      {!loading && articles.length === 0 && (
+        <div>데이터가 존재하지 않습니다.</div>
+      )}
+      {articles.length > 0 ? (
         <div className={styles['allarticle-list']}>
           {articles.map((article) => (
             <div key={article.id} className={styles['allarticle-item']}>
@@ -98,7 +160,7 @@ export default function AllArticlesSection() {
                     {article.writer.nickname}
                   </span>
                   <span className={styles['allarticle-updatedAt']}>
-                    {formatDate(article.updatedAt)}
+                    {formatDate(article.createdAt)}
                   </span>
                 </div>
                 <span className={styles['allarticle-likes']}>
@@ -110,8 +172,9 @@ export default function AllArticlesSection() {
           ))}
         </div>
       ) : (
-        <div>데이터를 불러오는 중...</div>
+        loading && <div>데이터를 불러오는 중...</div>
       )}
+      {hasMore && !loading && <div ref={loadMoreRef} className="h-10" />}
     </div>
   );
 }
