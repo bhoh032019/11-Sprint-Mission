@@ -1,0 +1,27 @@
+.searchbar-container {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  padding: 9px 16px;
+  flex: 1;
+  background-color: #f3f4f6;
+}
+
+.searchbar-input {
+  border: none;
+  flex: 1;
+  background-color: inherit;
+  margin-left: 4px;
+}
+
+.searchbar-input::placeholder {
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: left;
+  color: #9ca3af;
+}
+
+.searchbar-input:focus {
+  outline: none;
+}
