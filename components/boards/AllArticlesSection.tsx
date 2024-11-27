@@ -128,7 +128,7 @@ export default function AllArticlesSection({
     <div>
       <div className={styles['all-section-header']}>
         <div className={styles['all-title']}>게시글</div>
-        <Link className={styles['addArticlelink']} href="/addArticle">
+        <Link className={styles['addArticlelink']} href="/addboard">
           글쓰기
         </Link>
       </div>

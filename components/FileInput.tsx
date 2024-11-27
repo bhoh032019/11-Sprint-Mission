@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import '../style/ProductCreateForm.css';
+import styles from '../styles/FileInput.module.css';
 import PlusIcon from '../public/svgs/ic_plus.svg';
 import DeleteIcon from '../public/svgs/ic_X.svg';
 
@@ -48,7 +48,7 @@ function FileInput({ name, value, initialPreview, onChange }: FileInputProps) {
 
   return (
     <div>
-      <div className="image-input-form">
+      <div className={styles['image-input-form']}>
         <input
           id="file"
           type="file"
@@ -57,25 +57,28 @@ function FileInput({ name, value, initialPreview, onChange }: FileInputProps) {
           ref={inputRef}
           disabled={isImageValid}
         />
-        <label htmlFor="file" className="filelabel">
+        <label htmlFor="file" className={styles['filelabel']}>
           <PlusIcon />
           이미지 등록
         </label>
         {value && (
-          <div className="preview-container">
+          <div className={styles['preview-container']}>
             <img
               className="image-preview"
               src={preview || ''}
               alt="이미지 미리보기"
             />
-            <button className="image-delete-btn" onClick={handleClearClick}>
+            <button
+              className={styles['image-delete-btn']}
+              onClick={handleClearClick}
+            >
               <DeleteIcon />
             </button>
           </div>
         )}
       </div>
       {isImageValid && (
-        <div className="image-warning-message">
+        <div className={styles['image-warning-message']}>
           *이미지 등록은 최대 1개까지 가능합니다.
         </div>
       )}
