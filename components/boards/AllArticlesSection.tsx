@@ -148,7 +148,11 @@ export default function AllArticlesSection({
       {articles.length > 0 ? (
         <div className={styles['allarticle-list']}>
           {articles.map((article) => (
-            <div key={article.id} className={styles['allarticle-item']}>
+            <Link
+              href={`/board/${article.id}`}
+              key={article.id}
+              className={styles['allarticle-item']}
+            >
               <div className={styles['allarticle-body']}>
                 <h2 className={styles['allarticle-title']}>{article.title}</h2>
                 <Image
@@ -173,7 +177,7 @@ export default function AllArticlesSection({
                   {article.likeCount}
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       ) : (
