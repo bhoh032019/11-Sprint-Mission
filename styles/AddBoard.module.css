@@ -1,0 +1,117 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 40px;
+}
+
+.container-title {
+  display: flex;
+  justify-content: space-between;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: left;
+  color: #1f2937;
+}
+
+.container-body {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.Registerbtn {
+  padding: 12px 23px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 0;
+  background-color: #9ca3af;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+  text-align: left;
+  color: #f3f4f6;
+}
+
+.Registerbtn.active {
+  background-color: #3692ff;
+  cursor: pointer;
+}
+
+.ArticleImage {
+  display: flex;
+  flex-direction: column;
+}
+
+.ArticleTitle {
+  display: flex;
+  flex-direction: column;
+}
+
+.ArticleContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.ArticleTitle > input {
+  padding: 16px 24px 16px 24px;
+  gap: 10px;
+  border-radius: 12px;
+  background-color: #f3f4f6;
+  border: 0;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  text-align: left;
+  outline-color: #3692ff;
+}
+
+.section-title-input::placeholder {
+  color: #9ca3af;
+}
+
+.ArticleContent > textarea {
+  padding: 16px 24px 16px 24px;
+  gap: 10px;
+  border-radius: 12px;
+  border: 0;
+  background-color: #f3f4f6;
+  font-family: Pretendard;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  text-align: left;
+  outline-color: #3692ff;
+}
+
+.ArticleContent > textarea::placeholder {
+  color: #9ca3af;
+}
+
+.section-title {
+  font-family: Pretendard;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 26px;
+  text-align: left;
+  color: #1f2937;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 16px 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1200px;
+    padding: 24px 0;
+    margin: 0 auto;
+  }
+}

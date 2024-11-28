@@ -56,6 +56,7 @@ function FileInput({ name, value, initialPreview, onChange }: FileInputProps) {
           onChange={handleChange}
           ref={inputRef}
           disabled={isImageValid}
+          style={{ display: 'none' }}
         />
         <label htmlFor="file" className={styles['filelabel']}>
           <PlusIcon />
@@ -64,7 +65,7 @@ function FileInput({ name, value, initialPreview, onChange }: FileInputProps) {
         {value && (
           <div className={styles['preview-container']}>
             <img
-              className="image-preview"
+              className={styles['image-preview']}
               src={preview || ''}
               alt="이미지 미리보기"
             />

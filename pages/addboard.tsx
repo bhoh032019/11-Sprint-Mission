@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import styles from '../styles/BoardsPage.module.css';
+import styles from '../styles/AddBoard.module.css';
 import FileInput from '@/components/FileInput';
 
 interface BoardCreateFormProps {
@@ -50,33 +50,49 @@ export default function AddBoardPage({
         <div className={styles['container-title']}>
           게시글 쓰기
           <button
-            className={`Registerbtn ${isFormValid ? 'active' : ''}`}
+            className={`${styles.Registerbtn} ${
+              isFormValid ? styles.active : ''
+            }`}
             disabled={!isFormValid}
           >
             등록
           </button>
         </div>
-        <div>*제목</div>
-        <input
-          name="title"
-          value={values.title}
-          placeholder="제목을 입력해주세요."
-          onChange={handleInputChange}
-        />
-        <div>*내용</div>
-        <textarea
-          name="content"
-          value={values.content}
-          placeholder="내용을 입력해주세요."
-          onChange={handleInputChange}
-        />
-        <div>이미지</div>
-        <FileInput
-          name="imgFile"
-          value={values.imgFile}
-          initialPreview={initialPreview}
-          onChange={handleChange}
-        />
+        <div className={styles['container-body']}>
+          <div
+            className={`${styles['section-title']} ${styles['ArticleTitle']}`}
+          >
+            *제목
+            <input
+              name="title"
+              value={values.title}
+              placeholder="제목을 입력해주세요."
+              onChange={handleInputChange}
+            />
+          </div>
+          <div
+            className={`${styles['section-title']} ${styles['ArticleContent']}`}
+          >
+            *내용
+            <textarea
+              name="content"
+              value={values.content}
+              placeholder="내용을 입력해주세요."
+              onChange={handleInputChange}
+            />
+          </div>
+          <div
+            className={`${styles['section-title']} ${styles['ArticleImage']}`}
+          >
+            이미지
+            <FileInput
+              name="imgFile"
+              value={values.imgFile}
+              initialPreview={initialPreview}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
       </form>
     </div>
   );
