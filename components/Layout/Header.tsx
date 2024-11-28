@@ -19,7 +19,7 @@ const Header = () => {
             />
           </Link>
           <div className={styles['nav-link']}>
-            <Link className={styles['nav-list']} href="/boards">
+            <Link className={styles['nav-list']} href="/board">
               자유게시판
             </Link>
             <Link
