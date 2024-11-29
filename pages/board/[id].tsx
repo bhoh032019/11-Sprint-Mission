@@ -173,7 +173,7 @@ export default function BoardsThreadPage({
           </div>
         </div>
       )}
-      <Link href={'/board'} className={styles['goback']}>
+      <Link href="/board" className={styles['goback']}>
         목록으로 돌아가기
         <BackIcon />
       </Link>

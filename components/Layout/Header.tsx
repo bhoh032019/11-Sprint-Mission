@@ -34,7 +34,7 @@ const Header = () => {
             </Link>
           </div>
         </div>
-        <Link className={styles['login']} href="/signin">
+        <Link className={styles['login']} href="/login">
           로그인
         </Link>
       </nav>
