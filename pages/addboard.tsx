@@ -59,18 +59,19 @@ export default function AddBoardPage({
           </button>
         </div>
         <div className={styles['container-body']}>
-          <div
+          <label
             className={`${styles['section-title']} ${styles['ArticleTitle']}`}
           >
             *제목
             <input
               name="title"
+              type="text"
               value={values.title}
               placeholder="제목을 입력해주세요."
               onChange={handleInputChange}
             />
-          </div>
-          <div
+          </label>
+          <label
             className={`${styles['section-title']} ${styles['ArticleContent']}`}
           >
             *내용
@@ -80,8 +81,8 @@ export default function AddBoardPage({
               placeholder="내용을 입력해주세요."
               onChange={handleInputChange}
             />
-          </div>
-          <div
+          </label>
+          <label
             className={`${styles['section-title']} ${styles['ArticleImage']}`}
           >
             이미지
@@ -91,7 +92,7 @@ export default function AddBoardPage({
               initialPreview={initialPreview}
               onChange={handleChange}
             />
-          </div>
+          </label>
         </div>
       </form>
     </div>

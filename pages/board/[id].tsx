@@ -1,7 +1,7 @@
 import axiosInstance from '@/lib/axiosInstance';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Profile from '@public/svgs/ic_profile.svg';
 import SortIcon from '@public/svgs/ic_kebab.svg';
 import styles from '@styles/BoardDetailPage.module.css';
@@ -45,6 +45,8 @@ export default function BoardsThreadPage({
   const { id } = router.query;
   const [comments, setComments] = useState<Comment[]>([]);
   const [article, setArticle] = useState<ArticleList>(initialArticle);
+  const [newComment, setNewComment] = useState('');
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -78,6 +80,14 @@ export default function BoardsThreadPage({
     fetchArticle();
   }, [router.isReady]);
 
+  useEffect(() => {
+    newComment ? setIsFormValid(true) : setIsFormValid(false);
+  }, [newComment]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setNewComment(e.target.value);
+  };
+
   const formatDate = (isoDate: string) => {
     const date = new Date(isoDate);
     return date
@@ -93,6 +103,27 @@ export default function BoardsThreadPage({
   return (
     <div className={styles['container']}>
       <ArticleContentSection article={article} />
+      <form className={styles['newcomment-section']}>
+        <label className={styles['newcomment-title']}>
+          댓글 달기
+          <textarea
+            name="content"
+            value={newComment}
+            placeholder="댓글을 입력해주세요."
+            onChange={handleInputChange}
+            className={styles['newcomment-content']}
+            rows={5}
+          />
+        </label>
+        <button
+          className={`${styles.Registerbtn} ${
+            isFormValid ? styles.active : ''
+          }`}
+          disabled={!isFormValid}
+        >
+          등록
+        </button>
+      </form>
       {comments.length > 0 ? (
         <div>
           {comments.map((comment, index) => (
