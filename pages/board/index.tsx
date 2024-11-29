@@ -1,7 +1,7 @@
 import React from 'react';
 import BestArticlesSection from '@components/boards/BestArticlesSection';
 import AllArticlesSection from '@components/boards/AllArticlesSection';
-import styles from '@styles/BoardsPage.module.css';
+import styles from '@styles/BoardPage.module.css';
 import { GetServerSideProps } from 'next';
 import { ArticleList } from '@components/types/articleTypes';
 import { getAllArticles } from '@pages/api/boardApi';

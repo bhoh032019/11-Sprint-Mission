@@ -2,8 +2,9 @@ import axiosInstance from '@/lib/axiosInstance';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Profile from '@public/svgs/ic_profile.svg';
-import EmptyComment from '@pubilc/svgs/Img_inquiry_empty.svg';
-import DropdownMenu from '@components/DropdownMenu';
+import EmptyComment from '@public/svgs/Img_inquiry_empty.svg';
+import SortIcon from '@public/svgs/ic_kebab.svg';
+import styles from '@styles/BoardDetailPage.module.css';
 
 interface Comment {
   id: number;
@@ -18,8 +19,6 @@ interface Comment {
     nickname: string;
   };
   isLiked: boolean;
-  isEditing: boolean;
-  originalContent: string;
 }
 
 const BoardsThreadPage = () => {
@@ -28,18 +27,15 @@ const BoardsThreadPage = () => {
   const [comments, setComments] = useState<Comment[]>([]);
 
   useEffect(() => {
+    console.log(id);
     const fetchComments = async () => {
       try {
-        const response = await axiosInstance.get(`/articles/${id}`);
-        // 각 댓글에 isEditing 및 originalContent 상태 추가
-        const commentsWithEditState: Comment[] = response.data.list.map(
-          (comment: Comment) => ({
-            ...comment,
-            isEditing: false,
-            originalContent: comment.content, // 원본 내용을 저장
-          }),
-        );
-        setComments(commentsWithEditState);
+        const response = await axiosInstance.get(`/articles/${id}/comments`, {
+          params: {
+            limit: 10,
+          },
+        });
+        setComments(response.data.list);
       } catch (error) {
         console.error('Error fetching comments:', error);
       }
@@ -48,67 +44,42 @@ const BoardsThreadPage = () => {
     fetchComments();
   }, []);
 
+  const formatDate = (isoDate: string) => {
+    const date = new Date(isoDate);
+    return date
+      .toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replace(/\. /g, '. ')
+      .slice(0, -1); // 공백 제거
+  };
+
   return (
     <div>
       {comments.length > 0 ? (
         <div>
           {comments.map((comment, index) => (
-            <div className="comment-container" key={index}>
-              <div className="comment-header">
-                {comment.isEditing ? (
-                  <textarea
-                    className="comment-edit-content"
-                    value={comment.content}
-                    onChange={(e) =>
-                      setComments((prevComments) =>
-                        prevComments.map((c, i) =>
-                          i === index ? { ...c, content: e.target.value } : c,
-                        ),
-                      )
-                    }
-                  />
-                ) : (
-                  <>
-                    <div className="comment-content">{comment.content}</div>
-                    <DropdownMenu
-                      onSelection={(action: string) => {
-                        if (action === 'fixed') {
-                          handleEditClick(index);
-                        }
-                        if (action === 'delete') {
-                          console.log('Delete action triggered');
-                        }
-                      }}
-                    />
-                  </>
-                )}
+            <div className={styles['comment-container']} key={index}>
+              <div className={styles['comment-header']}>
+                <div className={styles['comment-content']}>
+                  {comment.content}
+                </div>
+                <SortIcon />
               </div>
-              <div className="comment-info">
-                <div className="comment-info-content">
-                  <Profile className="profile-icon" />
-
-                  <div className="comment-user-info">
-                    <div className="comment-nickname">
+              <div className={styles['comment-info']}>
+                <div className={styles['comment-info-content']}>
+                  <Profile className={styles['profile-icon']} />
+                  <div className={styles['comment-user-info']}>
+                    <div className={styles['comment-nickname']}>
                       {comment.writer.nickname}
                     </div>
-                    <div className="comment-updatedAt">
+                    <div className={styles['comment-updatedAt']}>
                       {formatDate(comment.updatedAt)}
                     </div>
                   </div>
                 </div>
-                {comment.isEditing && (
-                  <div className="comment-edit-actions">
-                    <button
-                      className="comment-edit-cancelbtn"
-                      onClick={() => handleCancelEdit(index)}
-                    >
-                      취소
-                    </button>
-                    <button className="comment-edit-successbtn">
-                      수정 완료
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           ))}
