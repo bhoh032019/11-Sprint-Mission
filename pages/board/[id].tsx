@@ -8,6 +8,7 @@ import styles from '@styles/BoardDetailPage.module.css';
 import { getArticles } from '@pages/api/boardApi';
 import { ArticleList } from '@/components/types/articleTypes';
 import Heart from '@public/svgs/ic_heart.svg';
+import ArticleContentSection from '@/components/boards/ArticleContentSection';
 
 interface Comment {
   id: number;
@@ -90,25 +91,7 @@ export default function BoardsThreadPage({
 
   return (
     <div className={styles['container']}>
-      <div className={styles['article-section']}>
-        <div className={styles['article-title']}>{article.title}</div>
-        <div className={styles['article-info']}>
-          <div className={styles['article-userinfo']}>
-            <Profile />
-            <div className={styles['article-nickname']}>
-              {article.writer.nickname}
-            </div>
-            <div className={styles['article-createdAt']}>
-              {formatDate(article.createdAt)}
-            </div>
-          </div>
-          <div className={styles['article-likecount']}>
-            <Heart />
-            {article.likeCount}
-          </div>
-        </div>
-        <div className={styles['article-content']}>{article.content}</div>
-      </div>
+      <ArticleContentSection article={article} />
       {comments.length > 0 ? (
         <div>
           {comments.map((comment, index) => (
