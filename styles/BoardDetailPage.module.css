@@ -110,33 +110,24 @@
   color: #9ca3af;
 }
 
-.comment-edit-actions {
+.goback {
   display: flex;
-  gap: 4px;
-}
-
-.comment-edit-cancelbtn {
-  font-family: Pretendard;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 26px;
-  text-align: left;
-  color: #737373;
-}
-
-.comment-edit-successbtn {
-  padding: 12px 23px;
-  gap: 10px;
-  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
   background-color: #3692ff;
+  padding: 12px 64px;
+  gap: 8px;
+  border-radius: 40px;
   font-family: Pretendard;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 26px;
-  text-align: left;
+  text-align: center;
+  text-decoration: none;
   color: #f3f4f6;
+  margin: auto;
 }
 
-.comment-edit-successbtn:hover {
+.goback:hover {
   background-color: #1251aa;
 }

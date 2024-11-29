@@ -158,7 +158,7 @@ export default function AllArticlesSection({
                 <Image
                   width={46}
                   height={46}
-                  src={article.image || '/images/Img_home_02.png'}
+                  src={article.image || '/pngs/Img_home_02.png'}
                   alt="게시글 이미지"
                   className={styles['allarticle-image']}
                 />

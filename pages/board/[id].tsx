@@ -1,14 +1,15 @@
 import axiosInstance from '@/lib/axiosInstance';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Profile from '@public/svgs/ic_profile.svg';
-import EmptyComment from '@public/svgs/Img_inquiry_empty.svg';
 import SortIcon from '@public/svgs/ic_kebab.svg';
 import styles from '@styles/BoardDetailPage.module.css';
 import { getArticles } from '@pages/api/boardApi';
 import { ArticleList } from '@/components/types/articleTypes';
-import Heart from '@public/svgs/ic_heart.svg';
 import ArticleContentSection from '@/components/boards/ArticleContentSection';
+import Link from 'next/link';
+import BackIcon from '@public/svgs/ic_back.svg';
 
 interface Comment {
   id: number;
@@ -126,11 +127,25 @@ export default function BoardsThreadPage({
           ))}
         </div>
       ) : (
-        <div className="comment-empty">
-          <EmptyComment className="comment-empty-icon" />
-          <div className="comment-empty-content">아직 문의가 없어요</div>
+        <div className={styles['comment-empty']}>
+          <Image
+            width={140}
+            height={140}
+            src="/pngs/Img_reply_empty.png"
+            alt="댓글 이미지"
+          />
+          <div className={styles['comment-empty-content']}>
+            아직 댓글이 없어요,
+          </div>
+          <div className={styles['comment-empty-content']}>
+            지금 댓글을 달아보세요!
+          </div>
         </div>
       )}
+      <Link href={'/board'} className={styles['goback']}>
+        목록으로 돌아가기
+        <BackIcon />
+      </Link>
     </div>
   );
 }
