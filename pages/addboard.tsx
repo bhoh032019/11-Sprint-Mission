@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import styles from '../styles/AddBoard.module.css';
-import FileInput from '@/components/FileInput';
+import styles from '@styles/AddBoard.module.css';
+import FileInput from '@components/FileInput';
 
 interface BoardCreateFormProps {
   initialValues?: {

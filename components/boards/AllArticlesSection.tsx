@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from '../../styles/AllArticlesSection.module.css';
-import { getAllArticles } from '../../pages/api/boardApi';
+import styles from '@styles/AllArticlesSection.module.css';
+import { getAllArticles } from '@pages/api/boardApi';
 import Link from 'next/link';
 import Image from 'next/image';
-import Heart from '../../public/svgs/ic_heart.svg';
-import SearchBar from '../SearchBar';
+import Heart from '@public/svgs/ic_heart.svg';
+import SearchBar from '@components/SearchBar';
 import router, { useRouter } from 'next/router';
-import DropdownMenu from '../DropdownMenu';
-import { ArticleList, ArticleOrderBy } from '../types/articleTypes';
+import DropdownMenu from '@components/DropdownMenu';
+import { ArticleList, ArticleOrderBy } from '@components/types/articleTypes';
 import React from 'react';
 
 interface AllArticlesSectionProps {

@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import styles from '../styles/FileInput.module.css';
-import PlusIcon from '../public/svgs/ic_plus.svg';
-import DeleteIcon from '../public/svgs/ic_X.svg';
+import styles from '@styles/FileInput.module.css';
+import PlusIcon from '@public/svgs/ic_plus.svg';
+import DeleteIcon from '@public/svgs/ic_X.svg';
 
 interface FileInputProps {
   name: string;
