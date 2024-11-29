@@ -33,3 +33,11 @@ export async function getAllArticles(page, orderBy, keyword) {
     errorMessage: '게시글을 불러오는데 실패했습니다.',
   });
 }
+
+export async function getArticles(id) {
+  return apiRequest({
+    method: 'GET',
+    endpoint: `/articles/${id}`,
+    errorMessage: '게시글을 불러오는데 실패했습니다.',
+  });
+}
