@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthProvider';
+import { useRouter } from 'next/router';
 import styles from '@styles/Login.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,19 +16,30 @@ export default function LoginPage() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const { login } = useAuth();
+  const router = useRouter();
+
   useEffect(() => {
     const emailValid = validateEmail(email);
     const passwordValid = password.length >= 8;
     setIsEmailValid(emailValid || email === '');
     setIsPasswordValid(passwordValid || password === '');
     setIsFormValid(emailValid && passwordValid);
-    console.log(isFormValid);
   }, [email, password]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
-      console.log('Form Submitted:', { email, password });
+      try {
+        await login({ email, password });
+        router.push('/');
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        } else {
+          alert('알 수 없는 에러가 발생했습니다.');
+        }
+      }
     }
   };
 
