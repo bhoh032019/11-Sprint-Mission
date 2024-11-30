@@ -84,6 +84,40 @@ export default function BoardsThreadPage({
     newComment ? setIsFormValid(true) : setIsFormValid(false);
   }, [newComment]);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    const data = {
+      content: newComment, // newComment를 직접 사용
+    };
+
+    try {
+      const response = await axiosInstance.post(
+        `/articles/${id}/comments`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      console.log('댓글 등록 성공:', response.data);
+      alert('댓글이 등록되었습니다.');
+      setNewComment(''); // 댓글 입력 필드 초기화
+    } catch (error) {
+      console.error('댓글 등록 실패:', error);
+      alert('댓글 등록에 실패했습니다.');
+    }
+  };
+
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewComment(e.target.value);
   };
@@ -103,7 +137,7 @@ export default function BoardsThreadPage({
   return (
     <div className={styles['container']}>
       <ArticleContentSection article={article} />
-      <form className={styles['newcomment-section']}>
+      <form className={styles['newcomment-section']} onSubmit={handleSubmit}>
         <label className={styles['newcomment-title']}>
           댓글 달기
           <textarea
@@ -120,6 +154,7 @@ export default function BoardsThreadPage({
             isFormValid ? styles.active : ''
           }`}
           disabled={!isFormValid}
+          type="submit"
         >
           등록
         </button>

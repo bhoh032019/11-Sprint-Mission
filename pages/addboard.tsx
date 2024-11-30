@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import styles from '@styles/AddBoard.module.css';
 import FileInput from '@components/FileInput';
+import axiosInstance from '@/lib/axiosInstance';
 
 interface BoardCreateFormProps {
   initialValues?: {
@@ -44,15 +45,49 @@ export default function AddBoardPage({
     }
   }, [values]);
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const { title, content } = values;
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    const data = {
+      title,
+      content,
+      image:
+        'https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/Sprint_Mission/user/3/1721991853452/5389615.png',
+    };
+
+    try {
+      const response = await axiosInstance.post('articles', data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('게시글 등록 성공:', response.data);
+      alert('게시글이 등록되었습니다.');
+    } catch (error) {
+      console.error('게시글 등록 실패:', error);
+      alert('게시글 등록에 실패했습니다.');
+    }
+  };
+
   return (
     <div className={styles['container']}>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className={styles['container-title']}>
           게시글 쓰기
           <button
             className={`${styles.Registerbtn} ${
               isFormValid ? styles.active : ''
             }`}
+            type="submit"
             disabled={!isFormValid}
           >
             등록
