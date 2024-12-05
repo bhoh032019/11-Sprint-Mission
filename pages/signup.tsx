@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@styles/Signup.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,6 +20,7 @@ export default function Signup() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const validateForm = () => {
     const emailValid = validateEmail(email);
@@ -50,6 +51,21 @@ export default function Signup() {
       }
     }
   };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+      router.replace('/');
+      console.log(accessToken);
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, []);
+
+  if (isCheckingAuth) {
+    return null;
+  }
 
   return (
     <div className={styles['signup-page']}>

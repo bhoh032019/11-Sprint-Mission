@@ -15,11 +15,21 @@ export default function LoginPage() {
   const [isPasswordValid, setIsPasswordValid] = useState(true);
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const { login } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+      router.replace('/');
+      console.log(accessToken);
+    } else {
+      setIsCheckingAuth(false);
+    }
+
     const emailValid = validateEmail(email);
     const passwordValid = password.length >= 8;
     setIsEmailValid(emailValid || email === '');
@@ -42,6 +52,10 @@ export default function LoginPage() {
       }
     }
   };
+
+  if (isCheckingAuth) {
+    return null;
+  }
 
   return (
     <div className={styles['login-page']}>
