@@ -57,7 +57,6 @@ export default function Signup() {
 
     if (accessToken) {
       router.replace('/');
-      console.log(accessToken);
     } else {
       setIsCheckingAuth(false);
     }

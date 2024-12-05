@@ -15,13 +15,13 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    setIsCheckingAuth(false); // 로그아웃 후 상태 업데이트
-    setIsDropdownVisible(false); // 드롭다운 닫기
+    setIsCheckingAuth(false);
+    setIsDropdownVisible(false);
   };
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    setIsCheckingAuth(!!accessToken); // accessToken 존재 여부에 따라 상태 설정
+    setIsCheckingAuth(!!accessToken);
   }, []);
 
   return (

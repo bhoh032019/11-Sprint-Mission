@@ -25,7 +25,6 @@ export default function LoginPage() {
 
     if (accessToken) {
       router.replace('/');
-      console.log(accessToken);
     } else {
       setIsCheckingAuth(false);
     }
