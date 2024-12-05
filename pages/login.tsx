@@ -142,7 +142,7 @@ export default function LoginPage() {
           </div>
         </div>
         <div className={styles['login-footer']}>
-          판다마켓이 처음이신가요?{' '}
+          판다마켓이 처음이신가요?
           <Link className={styles['link-signup']} href="./signup">
             회원가입
           </Link>
