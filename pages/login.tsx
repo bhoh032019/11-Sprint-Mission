@@ -5,15 +5,32 @@ import styles from '@styles/Login.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface LoginFormState {
+  email: string;
+  password: string;
+}
+
+interface ValidationState {
+  email: boolean;
+  password: boolean;
+  form: boolean;
+}
+
 const validateEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [formData, setFormData] = useState<LoginFormState>({
+    email: '',
+    password: '',
+  });
+
+  const [validation, setValidation] = useState<ValidationState>({
+    email: true,
+    password: true,
+    form: false,
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
@@ -28,19 +45,29 @@ export default function LoginPage() {
     } else {
       setIsCheckingAuth(false);
     }
+  }, [router]);
 
-    const emailValid = validateEmail(email);
-    const passwordValid = password.length >= 8;
-    setIsEmailValid(emailValid || email === '');
-    setIsPasswordValid(passwordValid || password === '');
-    setIsFormValid(emailValid && passwordValid);
-  }, [email, password]);
+  useEffect(() => {
+    const emailValid = validateEmail(formData.email);
+    const passwordValid = formData.password.length >= 8;
+
+    setValidation({
+      email: emailValid || formData.email === '',
+      password: passwordValid || formData.password === '',
+      form: emailValid && passwordValid,
+    });
+  }, [formData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
+    if (validation.form) {
       try {
-        await login({ email, password });
+        await login({ email: formData.email, password: formData.password });
         router.push('/');
       } catch (error) {
         if (error instanceof Error) {
@@ -72,15 +99,16 @@ export default function LoginPage() {
             <label className={styles['sign-label']}>이메일</label>
             <input
               className={`${styles['input-area']} ${
-                !isEmailValid ? styles['error'] : ''
+                !validation.email ? styles['error'] : ''
               }`}
               type="email"
+              name="email"
               placeholder="이메일을 입력해주세요"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
-          {!isEmailValid && email && (
+          {!validation.email && formData.email && (
             <div className={styles['failure-message']}>
               잘못된 이메일 형식입니다.
             </div>
@@ -90,12 +118,13 @@ export default function LoginPage() {
             <div className={styles['input-wrapper']}>
               <input
                 className={`${styles['input-area']} ${
-                  !isPasswordValid ? styles['error'] : ''
+                  !validation.password ? styles['error'] : ''
                 }`}
                 type={showPassword ? 'text' : 'password'}
+                name="password"
                 placeholder="비밀번호를 입력해주세요"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={handleChange}
               />
               <button
                 type="button"
@@ -116,7 +145,7 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
-          {!isPasswordValid && password && (
+          {!validation.password && formData.password && (
             <div className={styles['pw-failure-message']}>
               비밀번호를 8자 이상 입력해주세요.
             </div>
@@ -124,10 +153,10 @@ export default function LoginPage() {
           <div className={styles['submit']}>
             <button
               className={`${styles['sign-button']} ${
-                isFormValid ? styles['active'] : ''
+                validation.form ? styles['active'] : ''
               }`}
               type="submit"
-              disabled={!isFormValid}
+              disabled={!validation.form}
             >
               로그인
             </button>
