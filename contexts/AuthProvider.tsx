@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useMemo } from 'react';
 import axiosInstance from '@lib/axiosInstance';
 
 interface AuthContextType {
@@ -27,15 +27,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        login,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      login,
+    }),
+    [login],
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
