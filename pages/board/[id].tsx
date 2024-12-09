@@ -10,6 +10,7 @@ import { ArticleList } from '@/components/types/articleTypes';
 import ArticleContentSection from '@/components/boards/ArticleContentSection';
 import Link from 'next/link';
 import BackIcon from '@public/svgs/ic_back.svg';
+import CommentList from '@/components/CommentList';
 
 interface Comment {
   id: number;
@@ -162,34 +163,7 @@ export default function BoardsThreadPage({
       {comments.length > 0 ? (
         <div>
           {comments.map((comment, index) => (
-            <div className={styles['comment-container']} key={index}>
-              <div className={styles['comment-header']}>
-                <div className={styles['comment-content']}>
-                  {comment.content}
-                </div>
-                <SortIcon />
-              </div>
-              <div className={styles['comment-info']}>
-                <div className={styles['comment-info-content']}>
-                  {comment.writer.image ? (
-                    <img
-                      className={styles['profile-icon']}
-                      src={comment.writer.image}
-                    />
-                  ) : (
-                    <Profile className={styles['profile-icon']} />
-                  )}
-                  <div className={styles['comment-user-info']}>
-                    <div className={styles['comment-nickname']}>
-                      {comment.writer.nickname}
-                    </div>
-                    <div className={styles['comment-updatedAt']}>
-                      {formatDate(comment.updatedAt)}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CommentList comment={comment} index={index}></CommentList>
           ))}
         </div>
       ) : (
