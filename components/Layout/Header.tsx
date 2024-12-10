@@ -2,11 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from '@styles/Header.module.css';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthProvider';
 
 const Header = () => {
   const { pathname } = useRouter();
-  const [isCheckingAuth, setIsCheckingAuth] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const toggleDropdown = () => {
@@ -14,15 +15,9 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    setIsCheckingAuth(false);
+    logout();
     setIsDropdownVisible(false);
   };
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    setIsCheckingAuth(!!accessToken);
-  }, []);
 
   return (
     <>
@@ -52,7 +47,7 @@ const Header = () => {
             </Link>
           </div>
         </div>
-        {isCheckingAuth ? (
+        {isAuthenticated ? (
           <div className={styles['sortButtonWrapper']}>
             <button
               className={styles['sortDropdownTriggerButton']}
