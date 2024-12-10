@@ -20,7 +20,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const { accessToken } = response.data;
 
       localStorage.setItem('accessToken', accessToken);
-      console.log('로그인 성공');
     } catch (error) {
       console.error('로그인 실패:', error);
       throw new Error('로그인에 실패했습니다.');

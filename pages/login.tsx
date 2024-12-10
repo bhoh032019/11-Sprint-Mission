@@ -48,13 +48,13 @@ export default function LoginPage() {
   }, [router]);
 
   useEffect(() => {
-    const emailValid = validateEmail(formData.email);
-    const passwordValid = formData.password.length >= 8;
+    const isEmailValid = validateEmail(formData.email);
+    const isPasswordValid = formData.password.length >= 8;
 
     setValidation({
-      email: emailValid || formData.email === '',
-      password: passwordValid || formData.password === '',
-      form: emailValid && passwordValid,
+      email: isEmailValid || formData.email === '',
+      password: isPasswordValid || formData.password === '',
+      form: isEmailValid && isPasswordValid,
     });
   }, [formData]);
 

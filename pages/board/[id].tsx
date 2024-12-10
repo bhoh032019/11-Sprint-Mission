@@ -110,7 +110,6 @@ export default function BoardsThreadPage({
           },
         },
       );
-      console.log('댓글 등록 성공:', response.data);
       alert('댓글이 등록되었습니다.');
       setNewComment(''); // 댓글 입력 필드 초기화
     } catch (error) {

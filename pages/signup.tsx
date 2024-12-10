@@ -5,43 +5,78 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axiosInstance from '@/lib/axiosInstance';
 
+interface SignupFormState {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
+interface ValidationState {
+  email: boolean;
+  password: boolean;
+  passwordConfirmation: boolean;
+  form: boolean;
+}
+
 const validateEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export default function Signup() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(true);
-  const [isFormValid, setIsFormValid] = useState(false);
+
+  const [formData, setFormData] = useState<SignupFormState>({
+    email: '',
+    nickname: '',
+    password: '',
+    passwordConfirmation: '',
+  });
+
+  const [validation, setValidation] = useState<ValidationState>({
+    email: true,
+    password: true,
+    passwordConfirmation: true,
+    form: false,
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
-  const validateForm = () => {
-    const emailValid = validateEmail(email);
-    const passwordValid = password.length >= 8;
-    const confirmPasswordValid = password === passwordConfirmation;
-    setIsEmailValid(emailValid);
-    setIsPasswordValid(passwordValid);
-    setIsConfirmPasswordValid(confirmPasswordValid);
-    setIsFormValid(emailValid && passwordValid && confirmPasswordValid);
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      router.replace('/');
+    } else {
+      setIsCheckingAuth(false);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    const emailValid = validateEmail(formData.email);
+    const passwordValid = formData.password.length >= 8;
+    const confirmPasswordValid =
+      formData.password === formData.passwordConfirmation;
+
+    setValidation({
+      email: emailValid || formData.email === '',
+      password: passwordValid || formData.password === '',
+      passwordConfirmation:
+        confirmPasswordValid || formData.passwordConfirmation === '',
+      form: emailValid && passwordValid && confirmPasswordValid,
+    });
+  }, [formData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isFormValid) {
+    if (validation.form) {
       try {
-        await axiosInstance.post('/auth/signUp', {
-          email,
-          nickname,
-          password,
-          passwordConfirmation,
-        });
+        await axiosInstance.post('/auth/signUp', formData);
 
         alert('회원가입이 완료되었습니다.');
         router.push('/login');
@@ -51,16 +86,6 @@ export default function Signup() {
       }
     }
   };
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-
-    if (accessToken) {
-      router.replace('/');
-    } else {
-      setIsCheckingAuth(false);
-    }
-  }, []);
 
   if (isCheckingAuth) {
     return null;
@@ -83,15 +108,15 @@ export default function Signup() {
             <label className={styles['sign-label']}>이메일</label>
             <input
               className={`${styles['input-area']} ${
-                !isEmailValid && email ? styles['error'] : ''
+                !validation.email && formData.email ? styles['error'] : ''
               }`}
               type="email"
+              name="email"
               placeholder="이메일을 입력해주세요"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={validateForm}
+              value={formData.email}
+              onChange={handleChange}
             />
-            {!isEmailValid && email && (
+            {!validation.email && formData.email && (
               <div className={styles['failure-message']}>
                 잘못된 이메일 형식입니다.
               </div>
@@ -102,9 +127,10 @@ export default function Signup() {
             <input
               className={styles['input-area']}
               type="text"
+              name="nickname"
               placeholder="닉네임을 입력해주세요"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              value={formData.nickname}
+              onChange={handleChange}
             />
           </div>
           <div className={styles['sign-input']}>
@@ -112,13 +138,15 @@ export default function Signup() {
             <div className={styles['input-wrapper']}>
               <input
                 className={`${styles['input-area']} ${
-                  !isPasswordValid && password ? styles['error'] : ''
+                  !validation.password && formData.password
+                    ? styles['error']
+                    : ''
                 }`}
                 type={showPassword ? 'text' : 'password'}
+                name="password"
                 placeholder="비밀번호를 입력해주세요"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={validateForm}
+                value={formData.password}
+                onChange={handleChange}
               />
               <button
                 type="button"
@@ -138,7 +166,7 @@ export default function Signup() {
                 />
               </button>
             </div>
-            {!isPasswordValid && password && (
+            {!validation.password && formData.password && (
               <div className={styles['failure-message']}>
                 비밀번호는 8자 이상이어야 합니다.
               </div>
@@ -149,15 +177,16 @@ export default function Signup() {
             <div className={styles['input-wrapper']}>
               <input
                 className={`${styles['input-area']} ${
-                  !isConfirmPasswordValid && passwordConfirmation
+                  !validation.passwordConfirmation &&
+                  formData.passwordConfirmation
                     ? styles['error']
                     : ''
                 }`}
                 type={showConfirmPassword ? 'text' : 'password'}
+                name="passwordConfirmation"
                 placeholder="비밀번호를 다시 입력해주세요"
-                value={passwordConfirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-                onBlur={validateForm}
+                value={formData.passwordConfirmation}
+                onChange={handleChange}
               />
               <button
                 type="button"
@@ -177,19 +206,20 @@ export default function Signup() {
                 />
               </button>
             </div>
-            {!isConfirmPasswordValid && passwordConfirmation && (
-              <div className={styles['failure-message']}>
-                비밀번호가 일치하지 않습니다.
-              </div>
-            )}
+            {!validation.passwordConfirmation &&
+              formData.passwordConfirmation && (
+                <div className={styles['failure-message']}>
+                  비밀번호가 일치하지 않습니다.
+                </div>
+              )}
           </div>
           <div className={styles['submit']}>
             <button
               className={`${styles['sign-button']} ${
-                isFormValid ? styles['active'] : ''
+                validation.form ? styles['active'] : ''
               }`}
               type="submit"
-              disabled={!isFormValid}
+              disabled={!validation.form}
             >
               회원가입
             </button>
