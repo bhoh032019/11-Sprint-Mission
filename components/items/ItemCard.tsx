@@ -1,6 +1,6 @@
 import React from 'react';
-import '../style/Items.css';
-import Heart from '@pubilc/svgs/ic_heart.svg';
+import '@styles/Items.module.css';
+import Heart from '@public/svgs/ic_heart.svg';
 import { Product } from '@components/types/productTypes';
 import Link from 'next/link';
 

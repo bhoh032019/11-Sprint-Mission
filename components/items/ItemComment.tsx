@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axiosInstance from '@lib/axiosInstance';
 import Profile from '@public/svgs/ic_profile.svg';
 import EmptyComment from '@pubilc/svgs/Img_inquiry_empty.svg';
-import '../style/ItemComment.css';
+import '@style/ItemComment.css';
 import DropdownMenu from '@components/DropdownMenu';
 import { Product } from '@components/types/productTypes';
 
