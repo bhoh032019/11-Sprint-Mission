@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getProducts } from '@lib/api';
 import ItemCard from '@components/items/ItemCard';
-import '@styles/Items.module.css';
+import styles from '@styles/Items.module.css';
 import SearchIcon from '@public/svgs/ic_search.svg';
 import {
   Product,
@@ -65,24 +65,24 @@ function AllItemsSection() {
   }, [orderBy, page, pageSize]);
 
   return (
-    <div className="allItemsContainer">
-      <div className="allItemsHeader">
-        <h1 className="sectionTitle">전체 상품</h1>
-        <div className="allItemsSectionHeader">
-          <div className="searchBarWrapper">
+    <div className={styles['allItemsContainer']}>
+      <div className={styles['allItemsHeader']}>
+        <h1 className={styles['sectionTitle']}>전체 상품</h1>
+        <div className={styles['allItemsSectionHeader']}>
+          <div className={styles['searchBarWrapper']}>
             <SearchIcon />
             <input
-              className="searchBarInput"
+              className={styles['searchBarInput']}
               placeholder="검색할 상품을 입력해 주세요"
             />
           </div>
-          <Link className="itemRegisterbtn" href="/additem">
+          <Link className={styles['itemRegisterbtn']} href="/additem">
             상품 등록하기
           </Link>
         </div>
       </div>
 
-      <div className="allItemsCardSection">
+      <div className={styles['allItemsCardSection']}>
         {itemList?.map((item) => (
           <ItemCard item={item} key={`market-item-${item.id}`} />
         ))}

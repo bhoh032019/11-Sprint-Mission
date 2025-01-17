@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { getProducts } from '@lib/api';
 import ItemCard from '@/components/items/ItemCard';
-import '@styles/Items.module.css';
+import styles from '@styles/Items.module.css';
 import {
   Product,
   ProductListResponse,
   ProductOrderBy,
-} from '../types/productTypes';
+} from '@components/types/productTypes';
 
 const getPageSize = (width: number): number => {
   if (width < 768) {
@@ -52,10 +52,10 @@ function BestItemSection() {
   }, [pageSize]);
 
   return (
-    <div className="bestItemsContainer">
-      <h1 className="sectionTitle">베스트 상품</h1>
+    <div className={styles['bestItemsContainer']}>
+      <h1 className={styles['sectionTitle']}>베스트 상품</h1>
 
-      <div className="bestItemsCard">
+      <div className={styles['bestItemsCard']}>
         {itemList?.map((item) => (
           <ItemCard item={item} key={`best-item-${item.id}`} />
         ))}
